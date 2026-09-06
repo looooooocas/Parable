@@ -60,6 +60,10 @@ class QuestLog {
         questLog.addQuest(nextOccurence)
     }
     
+    func uncompleteQuest(_ quest: Quest){
+        quest.isCompleted = false
+    }
+    
     func getActiveQuests(target: Planet? = nil) -> [Quest] {
         if target == nil {
             return questLog.quests
@@ -75,8 +79,16 @@ class QuestLog {
             }
     }
     
-    func getAllQuests() -> [Quest] {
-        return quests.sorted { ($0.date ?? .distantFuture) < ($1.date ?? .distantFuture) }
+    func getAllQuests(target: Planet? = nil) -> [Quest] {
+        if target == nil {
+            return quests.sorted { ($0.date ?? .distantFuture) < ($1.date ?? .distantFuture) }
+        } else {
+            return quests.filter{ $0.owner == target } .sorted { ($0.date ?? .distantFuture) < ($1.date ?? .distantFuture) }
+        }
+    }
+    
+    func getCompletedQuests(target: Planet? = nil) -> [Quest] {
+        return getAllQuests(target: target).filter(\.self.isCompleted)
     }
     
     func getQuests(from planet: Planet) -> [Quest] {

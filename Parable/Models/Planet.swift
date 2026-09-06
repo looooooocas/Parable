@@ -14,7 +14,6 @@ class Planet {
     var name: String
     var isCapitol: Bool = false
     var icon: String
-    var completedQuests: [Quest] = []
     
     init(name: String, isCapitol: Bool = false, icon: PlanetIcon) {
             self.name = name
@@ -22,8 +21,6 @@ class Planet {
             self.icon = icon.displayName
         }
 }
-
-
 
 enum PlanetIcon: String, CaseIterable, Codable {
     case earth = "Earth"

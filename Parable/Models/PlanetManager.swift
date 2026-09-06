@@ -54,4 +54,11 @@ class PlanetManager {
             colonies.removeAll(where: { $0.id == planet.id })
         } //TODO: else warning 
     }
+    
+    public func editPlanet(_ planet: Planet, name: String, icon: String) {
+        planet.name = name
+        planet.icon = icon
+        try? modelContext.save()
+        modelContext.processPendingChanges()
+    }
 }

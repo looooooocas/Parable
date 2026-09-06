@@ -25,6 +25,7 @@ struct EditPlanetForm: View {
     let planet: Planet
     
     @State var name: String = ""
+    @State var icon: String = ""
     
     @Environment(\.dismiss) var dismiss
 
@@ -36,6 +37,20 @@ struct EditPlanetForm: View {
                         .autocorrectionDisabled(true)
                 }
                 //TODO: Actually let you edit lol
+                
+                Section(header: Text("Save")){
+                    Button(action: {
+                        planets.editPlanet(planet, name: name, icon: icon)
+                        dismiss()
+                    })
+                    {
+                        Image(systemName: "checkmark.circle.fill")
+                            .resizable() // 💡 Allows the system icon asset to scale manually
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.green)
+                    }
+                }
+                
                 Section(header: Text("Delete")){
                     Button(action: {
                         planets.deletePlanet(planet)
@@ -52,6 +67,7 @@ struct EditPlanetForm: View {
             }
             .onAppear {
                 name = planet.name
+                icon = planet.icon
             }
         }
     }

@@ -16,6 +16,7 @@ class Quest : Hashable{
     var descr: String?
     var date: Date?
     var isCompleted: Bool = false
+    var dateCompleted : Date?   
     var owner: Planet
     var recurrence: Recurrence
     var workLoadEst: Int?
@@ -31,7 +32,11 @@ class Quest : Hashable{
     }
     
     func complete(){
-        isCompleted.toggle()
+        isCompleted = true
+    }
+    
+    func uncomplete(){
+        isCompleted = false
     }
     
     func update(name: String?, description: String?, date: Date?){
@@ -60,8 +65,7 @@ enum Recurrence : String, CaseIterable, Identifiable, Codable{
 }
 
 extension Quest { // Due Date View
-    var formattedDate: String {
-        guard let questDate = self.date else { return "" }
+    func formattedDate(questDate: Date) -> String {
         
         let calendar = Calendar.current
         

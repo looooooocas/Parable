@@ -31,7 +31,11 @@ struct QuestCreationForm: View {
     @State var questName: String = ""
     @State var description: String = ""
     @State var hasDate: Bool = true
-    @State var questDate: Date = Date()
+    @State var questDate: Date = { // defaults to 11:59 pm
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        let startOfTomorrow = Calendar.current.date(byAdding: .day, value: 1, to: startOfToday)!
+        return Calendar.current.date(byAdding: .second, value: -1, to: startOfTomorrow) ?? Date()
+    }()
     @State var questReocc: Recurrence = .None
     @State var workloadEstimate: Int?
     

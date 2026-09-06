@@ -27,7 +27,7 @@ struct QuestView : View {
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .padding(.horizontal, 8)
-                    .padding(.vertical,4)
+                    .padding(.vertical,2)
                 // 1. Force the bar to a precise structural layout length
                     .frame(width: 150, height: 36, alignment: .leading)
                 // 2. Style the background container bounding box
@@ -40,11 +40,25 @@ struct QuestView : View {
                 Spacer()
                 Text(quest.owner.name)
                 Spacer()
-                if quest.date != nil {
-                    Text(quest.formattedDate)
-                        .foregroundColor(quest.isOverdue ? .red : .secondary)
+                switch quest.isCompleted {
+                    case false:
+                    if quest.date != nil {
+                        Text(quest.formattedDate(questDate: quest.date!))
+                            .foregroundColor(quest.isOverdue ? .red : .secondary)
+                    } else {
+                        Text("-")
+                    }
+                    CompleteQuestButton(quest: quest)
+                    //----
+                    case true:
+                    if quest.dateCompleted != nil {
+                        Text(quest.formattedDate(questDate: quest.dateCompleted!))
+                            .foregroundColor(quest.isOverdue ? .red : .secondary)
+                    } else {
+                        Text("-")
+                    }
+                    UncompleteQuestButton(quest: quest)
                 }
-                CompleteQuestButton(quest: quest)
             }
                 .offset(x: offset)
                 .gesture(

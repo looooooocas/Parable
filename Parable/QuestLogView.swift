@@ -12,32 +12,54 @@ struct QuestLogView: View {
     var targetPlanet: Planet? = nil
     let formOnScreen: Binding<Bool>
     @State private var questLog: QuestLog = Engine.shared.quests
+    @State var viewmode: QuestLogMode = .activeQuests
     
-    var activeQuests: [Quest] {
-        if let planet = targetPlanet {
-            return questLog.getActiveQuests(target: planet)
-        } else {
-            return questLog.getActiveQuests()
-        }
+    var activeQuests: [Quest] { // 
+            return questLog.getActiveQuests(target: targetPlanet)
+    }
+    
+    var completedQuests: [Quest]{
+        return questLog.getCompletedQuests(target: targetPlanet)
     }
     
     var body: some View {
             VStack{
                 HStack {
+                    ProgressTrackerView(planet: targetPlanet, viewmode: $viewmode)
                     Text("Quest Log")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
                     Spacer() // Pushes the badge directly to the trailing right edge
                     AddQuestButton(formOnScreen: formOnScreen)
-                    Text("\(activeQuests.count)")
-                        .font(.caption2)
-                        .bold()
-                        .foregroundColor(.white)
-                        .padding(10) // Controls how much room the badge has inside
-                        .background(Circle().fill(Color.blue)) // Pure, tiny background circle asset
-                        }
+                    switch viewmode {
+                    case .activeQuests:
+                        Text("\(activeQuests.count)")
+                            .font(.caption2)
+                            .bold()
+                            .foregroundColor(.white)
+                            .padding(10) // Controls how much room the badge has inside
+                            .background(Circle().fill(Color.blue)) // Pure, tiny background circle asset
+                    case .completedQuests:
+                        Text("\(completedQuests.count)")
+                            .font(.caption2)
+                            .bold()
+                            .foregroundColor(.white)
+                            .padding(10) // Controls how much room the badge has inside
+                            .background(Circle().fill(Color.blue)) // Pure, tiny background circle asset
+                    }
+                }
                 ScrollView {
-                    LazyVStack(spacing: 10) {
-                        ForEach(activeQuests) { quest in
-                            QuestView(quest)
+                    LazyVStack(spacing: 0) {
+                        switch viewmode {
+                            case .activeQuests:
+                            ForEach(activeQuests) { quest in
+                                QuestView(quest)
+                            }
+                            case .completedQuests:
+                            ForEach(completedQuests) { quest in
+                                QuestView(quest)
+                            }
                         }
                     }
                 }
@@ -51,6 +73,21 @@ struct QuestLogView: View {
                 .padding(10)
     }
 }
+
+enum QuestLogMode {
+    case activeQuests
+    case completedQuests
+    
+    mutating func toggle() {
+        switch self {
+        case .activeQuests:
+            self = .completedQuests
+        case .completedQuests:
+            self = .activeQuests
+        }
+    }
+}
+
 #Preview {
     QuestLogView(formOnScreen: .constant(false))
 }
