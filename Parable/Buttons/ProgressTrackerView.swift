@@ -24,7 +24,7 @@ struct ProgressTrackerView: View { // rename?
         let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
         
         return questLog.getAllQuests(target: planet).filter { quest in
-            guard let date = quest.date else { return false }
+            guard let date = quest.dateCompleted else { return false }
             return date >= startOfWeek && quest.isCompleted
         }.count
     }

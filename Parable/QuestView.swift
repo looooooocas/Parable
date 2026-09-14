@@ -31,6 +31,7 @@ struct QuestView : View {
                 // 1. Force the bar to a precise structural layout length
                     .frame(width: 150, height: 36, alignment: .leading)
                 // 2. Style the background container bounding box
+                    .foregroundColor(.black) 
                     .background(Color(.white))
                     .cornerRadius(8)
                 // 3. Prevent the text from wrapping onto a second line or breaking the frame
@@ -39,21 +40,29 @@ struct QuestView : View {
                     .truncationMode(.tail)
                 Spacer()
                 Text(quest.owner.name)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: 120, alignment: .center)
                 Spacer()
                 switch quest.isCompleted {
-                    case false:
-                    if quest.date != nil {
-                        Text(quest.formattedDate(questDate: quest.date!))
+                    case false: // Active Quest
+                    if quest.dateDue != nil {
+                        Text(quest.formattedDate(questDate: quest.dateDue!))
                             .foregroundColor(quest.isOverdue ? .red : .secondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: 130, alignment: .center)
                     } else {
                         Text("-")
                     }
                     CompleteQuestButton(quest: quest)
-                    //----
-                    case true:
+                    case true: // Completed Quest
                     if quest.dateCompleted != nil {
                         Text(quest.formattedDate(questDate: quest.dateCompleted!))
                             .foregroundColor(quest.isOverdue ? .red : .secondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: 130, alignment: .center)
                     } else {
                         Text("-")
                     }
@@ -61,14 +70,20 @@ struct QuestView : View {
                 }
             }
                 .offset(x: offset)
-                .gesture(
-                    DragGesture()
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 15)
                         .onChanged { value in
+                            let horizontal = abs(value.translation.width)
+                            let vertical = abs(value.translation.height)
+                            guard horizontal > vertical else { return }
                             withAnimation(.interactiveSpring()){
                                 offset = max(value.translation.width, 0)
                             }
                         }
                         .onEnded { value in
+                            let horizontal = abs(value.translation.width)
+                            let vertical = abs(value.translation.height)
+                            guard horizontal > vertical else { return }
                             withAnimation {
                                 offset = value.translation.width > 40 ? 80 : 0
                             }
@@ -77,3 +92,4 @@ struct QuestView : View {
         }
     }
 }
+
