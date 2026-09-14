@@ -77,7 +77,8 @@ struct QuestCreationForm: View {
                 Section{
                     Button("Create Task"){
                         //ensure form is sufficient
-                        let newQuest = Quest(name: questName, description: description, date: hasDate ? questDate : nil, isCompleted: false, owner: owner, reoccurence: questReocc, workLoadEst: workloadEstimate)
+                        
+                        let newQuest = Quest(name: questName, description: description, dateDue: hasDate ? questDate : nil, isCompleted: false, owner: owner, reoccurence: questReocc, workLoadEst: workloadEstimate)
                         questLog.addQuest(newQuest)
                         dismiss()
                     }

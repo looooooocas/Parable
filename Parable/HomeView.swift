@@ -22,19 +22,24 @@ struct HomeView: View {
                 HStack{
                     QuestLogView(formOnScreen: $taskFormOn)
                         .padding(.bottom, 10)
+                        .frame(maxHeight: 300)  
                     Spacer()
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 Spacer()
-                HStack{ // colonies
-                    ForEach(planets.colonies) { planet in
-                        NavigationLink(destination: PlanetPage(planet: planet)){
-                            PlanetView(planet: planet, size: 150)
+                // Colonies strip with horizontal scrolling
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(planets.colonies) { planet in
+                            NavigationLink(destination: PlanetPage(planet: planet)){
+                                PlanetView(planet: planet, size: 150)
+                            }
                         }
+                        AddPlanetButton(showingForm: $planetFormOn)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    AddPlanetButton(showingForm: $planetFormOn)
+                    .padding(.horizontal)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 NavigationLink(destination: PlanetPage(planet: planets.capitol)){
                     PlanetView(planet: planets.capitol, size: 300)

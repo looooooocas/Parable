@@ -64,6 +64,7 @@ struct QuestLogView: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(15)
             .background(
                 RoundedRectangle(cornerRadius: 20)

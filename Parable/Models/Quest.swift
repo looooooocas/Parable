@@ -14,21 +14,23 @@ import SwiftData
 class Quest : Hashable{
     var name: String
     var descr: String?
-    var date: Date?
+    var dateCreated: Date
+    var dateDue: Date?
     var isCompleted: Bool = false
-    var dateCompleted : Date?   
+    var dateCompleted : Date?
     var owner: Planet
     var recurrence: Recurrence
     var workLoadEst: Int?
     
-    init(name: String, description: String? = nil, date: Date? = nil, isCompleted: Bool, owner: Planet, reoccurence: Recurrence, workLoadEst: Int? = nil) {
+    init(name: String, description: String? = nil, dateDue: Date? = nil, isCompleted: Bool, owner: Planet, reoccurence: Recurrence, workLoadEst: Int? = nil) {
         self.name = name
         self.descr = description
-        self.date = date
+        self.dateDue = dateDue
         self.isCompleted = isCompleted
         self.owner = owner
         self.recurrence = reoccurence
         self.workLoadEst = workLoadEst
+        self.dateCreated = Date()
     }
     
     func complete(){
@@ -39,17 +41,17 @@ class Quest : Hashable{
         isCompleted = false
     }
     
-    func update(name: String?, description: String?, date: Date?){
+    func update(name: String?, description: String?, dateDue: Date?){
         self.name = name ?? self.name
         self.descr = description ?? self.descr
-        self.date = date ?? self.date
+        self.dateDue = dateDue ?? self.dateDue
     }
     
     func copy() -> Quest {
         let copy = Quest(
             name: self.name,
             description: self.descr,
-            date: self.date,  // Will be updated below
+            dateDue: self.dateDue,  // Will be updated below
             isCompleted: false,  // New quest starts incomplete
             owner: self.owner,
             reoccurence: self.recurrence,
@@ -94,9 +96,8 @@ extension Quest { // Due Date View
     }
     
     var isOverdue: Bool {
-        guard let questDate = self.date else { return false }
+        guard let questDate = self.dateDue else { return false }
         return questDate < Date() && !Calendar.current.isDateInToday(questDate)
     }
 }
-
 

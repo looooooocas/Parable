@@ -26,12 +26,22 @@ enum PlanetIcon: String, CaseIterable, Codable {
     case earth = "Earth"
     case pluto = "Pluto"
     case eos = "Eos"
+    case jupiter = "Jupiter"
+    case celestia = "Celestia"
+    case purple = "PurplePlanet"
+    case blue = "BlueGasGiant"
+    case blue2 = "BlueGasGiant1"
     
     var displayName: String {
         switch self {
         case .earth: return "Earth"
         case .pluto: return "Pluto"
         case .eos: return "Eos"
+        case .jupiter: return "Jupiter"
+        case .celestia: return "Celestia"
+        case .purple: return "PurplePlanet"
+        case .blue: return "BlueGasGiant"
+        case .blue2: return "BlueGasGiant1"
         }
     }
 }
